@@ -5,10 +5,16 @@ using UnityEngine;
 public class PartBox : MonoBehaviour
 {
     [SerializeField] private AnimationCurve _moveCurve;
+    private Resources _resources;
 
     public void MoveTo(Vector3 targetPosition)
     {
         StartCoroutine(MoveToPoint(transform.position, targetPosition, false));
+    }
+
+    public void setResources(Resources resources)
+    {
+        _resources = resources;
     }
 
     // Перемещение монеты из точки a в b за 1 секунду
@@ -18,10 +24,11 @@ public class PartBox : MonoBehaviour
         {
             float x = Mathf.Lerp(a.x, b.x, t);
 
-            float yInterpolant = _moveCurve.Evaluate(t);
-            float y = Mathf.LerpUnclamped(a.y, b.y, yInterpolant);
+            float yzInterpolant = _moveCurve.Evaluate(t);
+            float y = Mathf.LerpUnclamped(a.y, b.y, yzInterpolant);
+            float z = Mathf.LerpUnclamped(a.z, b.z, yzInterpolant);
 
-            Vector3 position = new Vector3(x, y, 0f);
+            Vector3 position = new Vector3(x, y, z);
             transform.position = position;
             yield return null;
         }
@@ -33,7 +40,10 @@ public class PartBox : MonoBehaviour
 
     public void Take()
     {
-        Vector3 nextPosition = transform.position - new Vector3(0, -transform.localScale.y / 2, 0);
-        MoveToPoint(transform.position, nextPosition, true);
+        gameObject.GetComponent<BoxCollider>().enabled = false;
+        Vector3 nextPosition = transform.position + new Vector3(0, -transform.localScale.y, 0);
+        StartCoroutine(MoveToPoint(transform.position, nextPosition, true));
+        _resources.CollectCoins(1, transform.position);
+
     }
 }

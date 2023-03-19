@@ -9,13 +9,23 @@ public class Resources : MonoBehaviour
 
     public int Coins { get; private set; }
     [SerializeField] private UICounter _counter;
+    [SerializeField] private PartBoxCreator _partBoxCreator;
 
     public event Action<int> OnChangeCoins;
     public event Action<Vector3> OnCollectCoins;
+    
 
     private void Start()
     {
         OnChangeCoins?.Invoke(Coins);
+    }
+
+    public void CollectBox(int value, Vector3 worldPosition)
+    {
+        for (int i = 0; i < value; i++)
+        {
+            _partBoxCreator.CreatePartBox(worldPosition);
+        }
     }
 
     public void CollectCoins(int value, Vector3 worldPosition) {

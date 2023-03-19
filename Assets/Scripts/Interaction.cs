@@ -17,6 +17,10 @@ public class Interaction : MonoBehaviour
                     clickable.Hit();
                 }
             }
+            if (hit.collider.TryGetComponent(out PartBox partBox))
+            {
+                partBox.Take();
+            }
         }
 
     }
