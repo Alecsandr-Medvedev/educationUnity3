@@ -18,8 +18,8 @@ public class Clickable : MonoBehaviour
     {
         HitEffect hitEffect = Instantiate(_hitEffectPrefab, transform.position, Quaternion.identity);
         hitEffect.Init(_coinsPerClick);
+        _resources.CollectCoins(1, transform.position);
         StartCoroutine(HitAnimation());
-        _resources.CollectBox(_coinsPerClick, transform.position);
     }
 
     // Анимация колебания куба
